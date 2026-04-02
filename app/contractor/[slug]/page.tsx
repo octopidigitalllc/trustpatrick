@@ -9,9 +9,6 @@ interface ContractorPageProps {
     params: Promise<{
         slug: string;
     }>;
-    searchParams: Promise<{
-        id?: string;
-    }>;
 }
 
 export async function generateMetadata({
@@ -29,12 +26,9 @@ export async function generateMetadata({
 
 export default async function ContractorPage({
     params,
-    searchParams,
 }: ContractorPageProps) {
     const { slug } = await params;
-    const { id } = await searchParams;
     const name = deslugify(slug);
-    const contractorId = id ? parseInt(id, 10) : 0;
 
     return (
         <section className="py-10 sm:py-14">
@@ -46,13 +40,7 @@ export default async function ContractorPage({
                     ]}
                 />
 
-                {contractorId ? (
-                    <ContractorDetail id={contractorId} />
-                ) : (
-                    <div className="text-center py-16 text-muted-foreground">
-                        <p>Invalid contractor. Please go back and select a contractor from the listing.</p>
-                    </div>
-                )}
+                <ContractorDetail slug={slug} />
             </Container>
         </section>
     );

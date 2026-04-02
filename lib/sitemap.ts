@@ -339,7 +339,7 @@ export async function getSitemapEntriesById(id: string): Promise<MetadataRoute.S
         );
 
         return chunk.map((contractor) => ({
-            url: `${SITE_URL}/contractor/${contractor.slug}?id=${contractor.id}`,
+            url: `${SITE_URL}/contractor/${contractor.slug}`,
             lastModified: now,
             changeFrequency: "weekly",
             priority: 0.6,

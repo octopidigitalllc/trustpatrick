@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { MapPin, Phone, Award, ArrowLeft, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -13,11 +14,27 @@ import { MEMBERSHIP_LEVELS } from "@/constants";
 import { generateLocalBusinessJsonLd } from "@/lib/seo";
 
 interface ContractorDetailProps {
-    id: number;
+    slug: string;
 }
 
-export default function ContractorDetail({ id }: ContractorDetailProps) {
-    const { data, isLoading, isError, error } = useContractorDetail(id);
+export default function ContractorDetail({ slug }: ContractorDetailProps) {
+    const [fallbackId, setFallbackId] = useState<number | undefined>();
+
+    useEffect(() => {
+        try {
+            const rawId = sessionStorage.getItem(`tp:contractor:${slug}`);
+            if (!rawId) return;
+
+            const parsed = Number.parseInt(rawId, 10);
+            if (Number.isInteger(parsed) && parsed > 0) {
+                setFallbackId(parsed);
+            }
+        } catch {
+            // Ignore storage access issues.
+        }
+    }, [slug]);
+
+    const { data, isLoading, isError, error } = useContractorDetail(slug, fallbackId);
     const contractor = data?.company_details;
 
     if (isLoading) {

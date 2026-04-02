@@ -18,6 +18,15 @@ export async function getContractors(
     return data;
 }
 
+export async function getContractorBySlug(
+    slug: string
+): Promise<ContractorDetailResponse> {
+    const { data } = await apiClient.get<ContractorDetailResponse>(
+        `/contractors/slug/${encodeURIComponent(slug)}`
+    );
+    return data;
+}
+
 export async function getContractorById(
     id: number
 ): Promise<ContractorDetailResponse> {

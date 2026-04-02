@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { MapPin, Phone, Award } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,8 +17,16 @@ export default function ContractorCard({ contractor }: ContractorCardProps) {
         ? MEMBERSHIP_LEVELS[contractor.membership_level_id]
         : null;
 
+    const handleClick = () => {
+        try {
+            sessionStorage.setItem(`tp:contractor:${contractor.slug}`, String(contractor.id));
+        } catch {
+            // Ignore storage errors; slug-based detail lookup remains the primary path.
+        }
+    };
+
     return (
-        <Link href={`/contractor/${contractor.slug}?id=${contractor.id}`}>
+        <Link href={`/contractor/${contractor.slug}`} onClick={handleClick}>
             <Card className="h-full transition-all hover:shadow-lg hover:border-primary/20 cursor-pointer">
                 <CardContent className="p-6">
                     <div className="flex items-start justify-between gap-4">

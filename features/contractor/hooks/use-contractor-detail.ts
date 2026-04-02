@@ -1,10 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { getContractorById } from "@/services/contractor.service";
+import {
+    getContractorBySlug,
+    getContractorById,
+} from "@/services/contractor.service";
 
-export function useContractorDetail(id: number) {
+export function useContractorDetail(slug: string, fallbackId?: number) {
     return useQuery({
-        queryKey: ["contractor", id],
-        queryFn: () => getContractorById(id),
-        enabled: !!id,
+        queryKey: ["contractor", slug, fallbackId ?? null],
+        queryFn: async () => {
+            try {
+                return await getContractorBySlug(slug);
+            } catch (error) {
+                if (fallbackId) {
+                    return getContractorById(fallbackId);
+                }
+                throw error;
+            }
+        },
+        enabled: !!slug,
     });
 }
