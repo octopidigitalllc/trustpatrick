@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FileQuestion } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import Container from "@/components/shared/container";
 
 export default function NotFound() {
@@ -14,9 +14,12 @@ export default function NotFound() {
                         The page you&apos;re looking for doesn&apos;t exist or may have been
                         moved.
                     </p>
-                    <Button render={<Link href="/" />}>
+                    <Link
+                        href="/"
+                        className={buttonVariants({ variant: "default" })}
+                    >
                         Back to Home
-                    </Button>
+                    </Link>
                 </div>
             </Container>
         </section>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/shared/container";
 import { Separator } from "@/components/ui/separator";
@@ -13,11 +14,17 @@ export default function Footer() {
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                         {/* Brand */}
                         <div>
-                            <Link href="/" className="flex items-center gap-2 mb-4">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-                                    T
-                                </div>
-                                <span className="text-lg font-bold">{SITE_NAME}</span>
+                            <Link href="/" className="mb-4 inline-flex items-center">
+                                <span className="relative block h-10 w-41">
+                                    <Image
+                                        src="/asset/logo.png"
+                                        alt={SITE_NAME}
+                                        fill
+                                        priority
+                                        className="object-contain object-left"
+                                        sizes="164px"
+                                    />
+                                </span>
                             </Link>
                             <p className="text-sm text-muted-foreground max-w-xs">
                                 Find trusted, verified home service professionals near you.
@@ -38,7 +45,7 @@ export default function Footer() {
                                 </li>
                                 <li>
                                     <Link
-                                        href="/#search"
+                                        href="/find-a-pro"
                                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                                     >
                                         Find a Pro

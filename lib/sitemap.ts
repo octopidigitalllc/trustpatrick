@@ -266,6 +266,16 @@ export async function getSitemapIndexEntries(): Promise<SitemapIndexEntry[]> {
         });
     }
 
+    // Category landing pages (one sitemap for /pros/{category}/{state}/{city})
+    const categoryLandingPageCount = Math.max(1, Math.ceil((categories.length * totalLocations) / MAX_URLS_PER_SITEMAP));
+    for (let page = 0; page < categoryLandingPageCount; page++) {
+        entries.push({
+            id: `category-landing-${page}`,
+            loc: `${SITE_URL}/sitemaps/category-landing-${page}.xml`,
+            lastModified: now,
+        });
+    }
+
     for (const category of categories) {
         const serviceCount = services.filter((service) => service.main_category_id === category.id).length;
         if (serviceCount === 0) continue;
@@ -344,6 +354,36 @@ export async function getSitemapEntriesById(id: string): Promise<MetadataRoute.S
             changeFrequency: "weekly",
             priority: 0.6,
         }));
+    }
+
+    const categoryLandingMatch = /^category-landing-(\d+)$/.exec(normalizedId);
+    if (categoryLandingMatch) {
+        const page = Number.parseInt(categoryLandingMatch[1], 10);
+        const { categories } = await fetchCategoriesAndServices();
+        const locations = await fetchLocationsPage(0, MAX_URLS_PER_SITEMAP);
+
+        const seen = new Set<string>();
+        const unique: MetadataRoute.Sitemap = [];
+
+        for (const category of categories) {
+            for (const location of locations) {
+                const stateSlug = slugify(location.state);
+                const citySlug = slugify(location.city);
+                const url = `${SITE_URL}/find-a-pro/${stateSlug}/${citySlug}/${category.slug}`;
+                if (!seen.has(url)) {
+                    seen.add(url);
+                    unique.push({
+                        url,
+                        lastModified: now,
+                        changeFrequency: "weekly",
+                        priority: 0.7,
+                    });
+                }
+            }
+        }
+
+        const startIdx = page * MAX_URLS_PER_SITEMAP;
+        return unique.slice(startIdx, startIdx + MAX_URLS_PER_SITEMAP);
     }
 
     const categoryMatch = /^category-(\d+)-(\d+)$/.exec(normalizedId);

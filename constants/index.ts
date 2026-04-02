@@ -12,6 +12,6 @@ export const MEMBERSHIP_LEVELS: Record<number, string> = {
 
 export const NAV_LINKS = [
     { label: "Home", href: "/" },
-    { label: "Find a Pro", href: "/#search" },
+    { label: "Find a Pro", href: "/find-a-pro" },
     { label: "About", href: "/about" },
 ] as const;
