@@ -20,6 +20,9 @@ export default function ContractorCard({ contractor }: ContractorCardProps) {
     const handleClick = () => {
         try {
             sessionStorage.setItem(`tp:contractor:${contractor.slug}`, String(contractor.id));
+            if (contractor.zip_codes) {
+                sessionStorage.setItem(`tp:contractor-zips:${contractor.slug}`, contractor.zip_codes);
+            }
         } catch {
             // Ignore storage errors; slug-based detail lookup remains the primary path.
         }

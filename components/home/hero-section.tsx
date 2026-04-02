@@ -1,11 +1,12 @@
 import AddressSearchBar from "@/components/home/address-search-bar";
+import ServiceZipSearchBar from "@/components/home/service-zip-search-bar";
 
 export default function HeroSection() {
     return (
-        <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <section className="relative overflow-visible bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 z-10">
             {/* Background Pattern */}
             <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-slate-900/80 to-transparent" />
 
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
                 <div className="text-center">
@@ -21,9 +22,21 @@ export default function HeroSection() {
                         professionals.
                     </p>
 
-                    {/* Search Bar */}
+                    {/* Address Search Bar */}
                     <div className="mt-10" id="search">
                         <AddressSearchBar />
+                    </div>
+
+                    {/* Separator */}
+                    <div className="flex items-center gap-4 max-w-xl mx-auto mt-6">
+                        <div className="flex-1 h-px bg-slate-600" />
+                        <span className="text-sm text-slate-400 font-medium">or search by service</span>
+                        <div className="flex-1 h-px bg-slate-600" />
+                    </div>
+
+                    {/* Service + ZIP Search Bar */}
+                    <div className="relative z-30 mt-6">
+                        <ServiceZipSearchBar />
                     </div>
 
                     {/* Trust indicators */}

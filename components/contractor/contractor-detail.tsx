@@ -19,6 +19,7 @@ interface ContractorDetailProps {
 
 export default function ContractorDetail({ slug }: ContractorDetailProps) {
     const [fallbackId, setFallbackId] = useState<number | undefined>();
+    const [listingZipCodes, setListingZipCodes] = useState<string | undefined>();
 
     useEffect(() => {
         try {
@@ -28,6 +29,17 @@ export default function ContractorDetail({ slug }: ContractorDetailProps) {
             const parsed = Number.parseInt(rawId, 10);
             if (Number.isInteger(parsed) && parsed > 0) {
                 setFallbackId(parsed);
+            }
+        } catch {
+            // Ignore storage access issues.
+        }
+    }, [slug]);
+
+    useEffect(() => {
+        try {
+            const rawZipCodes = sessionStorage.getItem(`tp:contractor-zips:${slug}`);
+            if (rawZipCodes) {
+                setListingZipCodes(rawZipCodes);
             }
         } catch {
             // Ignore storage access issues.
@@ -77,6 +89,10 @@ export default function ContractorDetail({ slug }: ContractorDetailProps) {
     const membershipLabel = contractor.membership_level_id
         ? MEMBERSHIP_LEVELS[contractor.membership_level_id]
         : null;
+    const zipCodesSource = listingZipCodes || contractor.zip_codes;
+    const allZipCodes = zipCodesSource
+        ? zipCodesSource.split(",").map((zip) => zip.trim()).filter(Boolean)
+        : [];
 
     const localBusinessJsonLd = generateLocalBusinessJsonLd(contractor);
 
@@ -163,6 +179,20 @@ export default function ContractorDetail({ slug }: ContractorDetailProps) {
                                         Full Address
                                     </p>
                                     <p className="font-medium">{formatAddress(contractor)}</p>
+                                </div>
+                            </>
+                        )}
+
+                        {allZipCodes.length > 0 && (
+                            <>
+                                <Separator />
+                                <div className="space-y-1">
+                                    <p className="text-sm font-medium text-muted-foreground">
+                                        Service ZIP Codes
+                                    </p>
+                                    <p className="font-medium wrap-break-word">
+                                        {allZipCodes.join(", ")}
+                                    </p>
                                 </div>
                             </>
                         )}

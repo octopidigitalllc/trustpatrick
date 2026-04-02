@@ -7,6 +7,7 @@ export interface Contractor {
     city: string | null;
     state: string | null;
     zip_code: string | null;
+    zip_codes?: string | null;
     membership_level_id: number | null;
 }
 
